@@ -36,11 +36,11 @@ public class ElasticsearchSearchHandler implements SearchHandler {
 
         SearchResponse results = sendQuery(queryBuilder.buildQuery(), extLimit);
 
-        if (results.getHits().getTotalHits() == 0) {
+        if (results.getHits().getTotalHits().value == 0L) {
             results = sendQuery(buildQuery(photonRequest, true).buildQuery(), extLimit);
         }
 
-        List<PhotonResult> ret = new ArrayList<>((int) results.getHits().getTotalHits());
+        List<PhotonResult> ret = new ArrayList<>((int) results.getHits().getTotalHits().value);
         for (SearchHit hit : results.getHits()) {
             ret.add(new ElasticResult(hit));
         }

@@ -20,12 +20,12 @@ public class ElasticResult implements PhotonResult {
 
     @Override
     public Object get(String key) {
-        return result.getSource().get(key);
+        return result.getSourceAsMap().get(key);
     }
 
     @Override
     public String getLocalised(String key, String language) {
-        final Map<String, String> map = (Map<String, String>) result.getSource().get(key);
+        final Map<String, String> map = (Map<String, String>) result.getSourceAsMap().get(key);
         if (map == null) return null;
 
         if (map.get(language) != null) {
@@ -45,16 +45,16 @@ public class ElasticResult implements PhotonResult {
 
     @Override
     public Map<String, String> getMap(String key) {
-        return (Map<String, String>) result.getSource().get(key);
+        return (Map<String, String>) result.getSourceAsMap().get(key);
     }
 
     @Override
     public double[] getCoordinates() {
-        final Map<String, Double> coordinate = (Map<String, Double>) result.getSource().get("coordinate");
+        final Map<String, Double> coordinate = (Map<String, Double>) result.getSourceAsMap().get("coordinate");
         if (coordinate == null) {
             log.error(String.format("invalid data [id=%s, type=%s], coordinate is missing!",
-                    result.getSource().get(Constants.OSM_ID),
-                    result.getSource().get(Constants.OSM_VALUE)));
+                    result.getSourceAsMap().get(Constants.OSM_ID),
+                    result.getSourceAsMap().get(Constants.OSM_VALUE)));
             return INVALID_COORDINATES;
         }
 
@@ -63,7 +63,7 @@ public class ElasticResult implements PhotonResult {
 
     @Override
     public double[] getExtent() {
-        final Map<String, Object> extent = (Map<String, Object>) result.getSource().get("extent");
+        final Map<String, Object> extent = (Map<String, Object>) result.getSourceAsMap().get("extent");
         if (extent == null) {
             return null;
         }

@@ -34,7 +34,7 @@ public class ElasticsearchReverseHandler implements ReverseHandler {
         SearchResponse results = search(queryBuilder.buildQuery(), photonRequest.getLimit(), photonRequest.getLocation(),
                 photonRequest.getLocationDistanceSort());
 
-        List<PhotonResult> ret = new ArrayList<>((int) results.getHits().getTotalHits());
+        List<PhotonResult> ret = new ArrayList<>((int) results.getHits().getTotalHits().value);
         for (SearchHit hit : results.getHits()) {
             ret.add(new ElasticResult(hit));
         }

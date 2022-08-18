@@ -11,7 +11,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.env.Environment;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.IndexNotFoundException;
@@ -60,8 +61,8 @@ public class Server {
     private File esDirectory;
 
     protected static class MyNode extends Node {
-        public MyNode(Settings preparedSettings, Collection<Class<? extends Plugin>> classpathPlugins) {
-            super(InternalSettingsPreparer.prepareEnvironment(preparedSettings, null), classpathPlugins);
+        public MyNode(Environment environment) {
+            super(environment);
         }
     }
 
@@ -90,9 +91,9 @@ public class Server {
                 if (index >= 0) {
                     int port = Integer.parseInt(tAddr.substring(index + 1));
                     String addrStr = tAddr.substring(0, index);
-                    trClient.addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress(addrStr, port)));
+                    trClient.addTransportAddress(new TransportAddress(new InetSocketAddress(addrStr, port)));
                 } else {
-                    trClient.addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress(tAddr, 9300)));
+                    trClient.addTransportAddress(new TransportAddress(new InetSocketAddress(tAddr, 9300)));
                 }
             }
 
@@ -105,9 +106,14 @@ public class Server {
             try {
                 sBuilder.put("transport.type", "netty4").put("http.type", "netty4").put("http.enabled", "true");
                 Settings settings = sBuilder.build();
+                /*
                 Collection<Class<? extends Plugin>> lList = new LinkedList<>();
                 lList.add(Netty4Plugin.class);
-                esNode = new MyNode(settings, lList);
+                */
+
+                Environment environment = new Environment(settings, null);
+                esNode = new Node(environment);
+                //esNode = new MyNode(settings, lList);
                 esNode.start();
 
                 log.info("started elastic search node");

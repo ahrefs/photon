@@ -1,9 +1,6 @@
 {
 	"place": {
 		"dynamic": "false",
-		"_all": {
-			"enabled": false
-		},
 		"_source": {
 			"excludes": [
 				"context.*"
@@ -237,7 +234,7 @@
 					}
 				}
 			},
-	  		"locality": {
+			"locality": {
 				"properties": {
 					"default": {
 						"type": "text",

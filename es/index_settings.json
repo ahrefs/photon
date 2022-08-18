@@ -59,8 +59,9 @@
 				],
 				"filter": [
 					"lowercase",
-					"preserving_word_delimiter"],
-				"tokenizer": "standard" 
+					"preserving_word_delimiter"
+				],
+				"tokenizer": "standard"
 			},
 			"search_classification": {
 				"filter": [
@@ -97,8 +98,8 @@
 				"min": "2",
 				"type": "length"
 			},
-			"preserving_word_delimiter": { 
-				"type": "word_delimiter",
+			"preserving_word_delimiter": {
+				"type": "word_delimiter_graph",
 				"preserve_original": "true"
 			}
 		}
